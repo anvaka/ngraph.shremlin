@@ -48,7 +48,6 @@ test('Get adjacent of adjacent', function(t) {
   t.plan(1);
 
   g = shremlin(graph);
-  debugger;
   g.V(startNodeId)
     .out()
     .out()
