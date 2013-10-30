@@ -102,6 +102,15 @@ test('Test VerticesToVertices stream', function(t) {
       });
   });
 
+  t.test('2 > both | both', function (t) {
+    t.plan(5);
+    g.V(2)
+      .both().both()
+      .on('data', function (vertex) {
+        t.ok([6, 5, 2].indexOf(vertex.id) !== -1);
+      });
+  });
+
   t.test('2 > in | in', function (t) {
     g.V(2)
       .in().in()
