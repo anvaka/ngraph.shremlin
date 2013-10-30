@@ -50,3 +50,25 @@ test('Can match with array', function (t) {
   t.notOk(match123({ data: 123}), 'Should not match with non array-like objects');
   t.end();
 });
+
+test('Can match with object filter', function (t) {
+  t.test('Match filter property', function (t) {
+    var matchNameAndAge = createFilter({ name : 'John'});
+    t.ok(matchNameAndAge({ data: {name: 'John'}}), 'Should match with full match');
+    t.ok(matchNameAndAge({ data: {name: 'John', age: 42}}), 'Should match with more keys');
+    t.notOk(matchNameAndAge({ data: {name: 'Johnson'}}), 'Should not match when one property does not match');
+    t.notOk(matchNameAndAge(), 'Should not match when object is missing');
+    t.end();
+  });
+
+  t.test('Match all filter properties', function (t) {
+    var matchNameAndAge = createFilter({ name : 'John', age: 42});
+    t.ok(matchNameAndAge({ data: {name: 'John', age: 42}}), 'Should match strict match');
+    t.ok(matchNameAndAge({ data: {name: 'John', age: 42, state: 'WA'}}), 'Should match with more keys');
+    t.notOk(matchNameAndAge({ data: {name: 'John', age: 41}}), 'Should not match when one property does not match');
+    t.notOk(matchNameAndAge({ data: {name: 'John'}}), 'Should not match when property is missing');
+    t.notOk(matchNameAndAge(), 'Should not match when object is missing');
+    t.end();
+  });
+  t.end();
+});
