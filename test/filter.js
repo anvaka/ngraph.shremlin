@@ -39,4 +39,14 @@ test('Can use custom predicate', function (t) {
     t.ok(matchUndefined(), 'Undefined should match!');
     t.notOk(matchUndefined('Hello'), 'Defined should not match');
   })
-})
+});
+
+test('Can match with array', function (t) {
+  var match123 = createFilter([1, 2, 3]);
+  t.ok(match123({data: [1, 2, 3]}), 'Should match with the same array');
+  t.ok(match123({data: {0:1, 1:2, 2:3, length: 3}}), 'Should match with array-like objects');
+  t.notOk(match123({ data: [1, 2, 3, 4]}), 'Should check length');
+  t.notOk(match123({ data: "123"}), 'Should do strict match');
+  t.notOk(match123({ data: 123}), 'Should not match with non array-like objects');
+  t.end();
+});
