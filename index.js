@@ -2,11 +2,9 @@
 
 module.exports = function(graph) {
   return {
-    V: createVertexStream
+    V: function createVertexStream(startFrom) {
+      var VertexStream = require('./lib/vertexStream');
+      return new VertexStream(graph, startFrom);
+    }
   };
-}
-
-function createVertexStream(startFrom) {
-  var VertexStream = require('./lib/vertexStream');
-  return new VertexStream(graph, startFrom);
-}
+};
