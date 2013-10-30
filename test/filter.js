@@ -20,3 +20,23 @@ test('Can match simple types', function (t) {
   t.end();
 });
 
+test('Can use custom predicate', function (t) {
+  t.test('verify predicate is called', function (t) {
+    t.plan(2);
+    var matchHello = createFilter(function (obj) {
+      t.pass('Custom predicate should be called');
+      return obj === 'hello';
+    });
+    t.ok(matchHello('hello'), 'Hello should match!');
+  });
+
+  t.test('verify object undefined is passed', function (t) {
+    t.plan(2);
+    var matchUndefined = createFilter(function (obj) {
+      return typeof obj === 'undefined';
+    });
+
+    t.ok(matchUndefined(), 'Undefined should match!');
+    t.notOk(matchUndefined('Hello'), 'Defined should not match');
+  })
+})
