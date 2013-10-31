@@ -8,3 +8,6 @@ module.exports = function(graph) {
     }
   };
 };
+
+var extendGraphStreams = require('./lib/streamExtensions');
+extendGraphStreams();
