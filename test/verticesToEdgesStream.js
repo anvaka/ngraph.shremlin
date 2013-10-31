@@ -2,7 +2,7 @@ var test = require('tap').test,
     shremlin = require('..'),
     createGraph = require('ngraph.graph');
 
-test('visit all outgoing edges', function (t) {
+test('visit all edges', function (t) {
   // this is our test graph:
   // 1 -> 2 <- 3
   //      v
@@ -31,7 +31,7 @@ test('visit all outgoing edges', function (t) {
   });
 
   t.test('2 | bothE', function (t) {
-    t.plan(6); // six becuase we have 3 edges times two asserts
+    t.plan(6); // six because we have 3 edges times two asserts
     g.V(2)
       .bothE()
       .on('data', function (edge) {
@@ -39,4 +39,24 @@ test('visit all outgoing edges', function (t) {
         t.ok([1, 2, 3].indexOf(edge.fromId) >= -1, "From ids are 1 2 and 3");
       });
   });
+});
+
+test('Visit filtered edges', function (t) {
+  var graph = createGraph();
+  graph.addLink(1, 3, 'mother');
+  graph.addLink(1, 4, 'father'); graph.addLink(5, 1, 'father');
+
+  g = shremlin(graph);
+  t.plan(2);
+  g.V(5)
+   .outE('father')
+   .on('data', function (edge) {
+     t.equal(edge.toId, 1, 'Father of 5 is 1');
+   })
+   .inV()
+   .outE('father')
+   .on('data', function(edge) {
+     t.equal(edge.toId, 4, 'Father of 1 is 4');
+   });
+
 });
