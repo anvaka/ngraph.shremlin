@@ -54,7 +54,6 @@ function createGraphOfGods() {
   graph.addLink('jupiter', 'neptune', 'brother');
   graph.addLink('neptune', 'jupiter', 'brother');
 
-
   graph.addLink('jupiter', 'saturn', 'father');
   graph.addLink('jupiter', 'sky', {
     action: 'lives',
