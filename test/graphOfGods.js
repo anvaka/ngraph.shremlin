@@ -1,7 +1,7 @@
 // see https://raw.github.com/wiki/thinkaurelius/titan/images/graph-of-the-gods-2.png
 // and https://github.com/thinkaurelius/titan/wiki/Getting-Started
 // for more details about this graph
-var graphOfGods = require('./graphOfGodsData')(),
+var graphOfGods = require('./data/graphOfGodsData')(),
     test = require('tap').test,
     shremlin = require('../');
 
