@@ -22,19 +22,19 @@ function createGraphOfGods() {
   graph.addNode('tartarus', { type: 'location'});
 
   // done with nodes, add edges:
-  grpah.addLink('hercules', 'nemean', {
+  graph.addLink('hercules', 'nemean', {
     action: 'battled',
-    time: 1,
+    times: 1,
     place: [38.1, 23.7]
   });
-  grpah.addLink('hercules', 'hydra', {
+  graph.addLink('hercules', 'hydra', {
     action: 'battled',
-    time: 2,
+    times: 2,
     place: [37.7, 23.9]
   });
-  grpah.addLink('hercules', 'cerberus', {
+  graph.addLink('hercules', 'cerberus', {
     action: 'battled',
-    time: 12,
+    times: 12,
     place: [39, 22]
   });
   graph.addLink('hercules', 'alcmene', 'mother');

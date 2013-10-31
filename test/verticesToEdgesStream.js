@@ -58,5 +58,4 @@ test('Visit filtered edges', function (t) {
    .on('data', function(edge) {
      t.equal(edge.toId, 4, 'Father of 1 is 4');
    });
-
 });
