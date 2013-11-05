@@ -8,6 +8,6 @@ test('Get path from Hercules', function (t) {
    .out()
    .path()
    .on('data', function(path) {
-     t.equal(path.length, 2, 'All out paths should be 1 item long');
+     t.equal(path.length, 2, 'All out paths should be 2 item long');
    });
 });
