@@ -8,7 +8,7 @@ test('Get all nodes', function (t) {
   var pathGraph = generators.path(10);
   g = shremlin(pathGraph);
 
-  g.V().on('data', function (vertex) {
+  g.V().forEach(function (vertex) {
     t.ok(vertex, "Vertex should be present");
   });
 });
@@ -20,7 +20,7 @@ test('Get specific node', function(t) {
       startNodeId = 0;
   g = shremlin(pathGraph);
 
-  g.V(startNodeId).on('data', function (vertex) {
+  g.V(startNodeId).forEach(function (vertex) {
     t.equal(vertex.id, startNodeId, "Start vertext should be valid");
   });
 });

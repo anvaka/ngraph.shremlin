@@ -1,3 +1,4 @@
+/*
 // see https://raw.github.com/wiki/thinkaurelius/titan/images/graph-of-the-gods-2.png
 // and https://github.com/thinkaurelius/titan/wiki/Getting-Started
 // for more details about this graph
@@ -45,4 +46,5 @@ test('Oh pluto', function (t) {
        t.ok(['cerberus', 'pluto'].indexOf(vertex.id) !== -1, 'Only cerberus and pluto');
      });
   });
-})
+});
+*/

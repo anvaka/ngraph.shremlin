@@ -45,6 +45,7 @@ function createGraphOfGods() {
    action: 'lives',
    reason: 'no fear of death'
   });
+  graph.addLink('pluto', 'cerberus', 'pet');
   graph.addLink('pluto', 'jupiter', 'brother');
   graph.addLink('jupiter', 'pluto', 'brother');
 

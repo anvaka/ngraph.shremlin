@@ -1,3 +1,4 @@
+/*
 var test = require('tap').test,
     shremlin = require('..'),
     createGraph = require('ngraph.graph');
@@ -95,3 +96,4 @@ test('Test VerticesToVertices stream', function(t) {
       }).on('end', function() { t.end(); });
   });
 });
+*/
