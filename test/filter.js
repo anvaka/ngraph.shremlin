@@ -1,5 +1,5 @@
 var test = require('tap').test,
-    createFilter = require('../lib/filterExpression');
+    createFilter = require('../lib/utils/filterExpression');
 
 // in ngraph.* all links and nodes store associated data within
 // 'data' proprerty. This test supposed to verify maches against data properties
