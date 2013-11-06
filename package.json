@@ -23,8 +23,5 @@
     "tap": "~0.4.4",
     "ngraph.graph": "~0.0.2",
     "ngraph.generators": "~0.0.1"
-  },
-  "dependencies": {
-    "ngraph.events": "0.0.1"
   }
 }
