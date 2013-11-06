@@ -1,4 +1,3 @@
-/*
 // see https://raw.github.com/wiki/thinkaurelius/titan/images/graph-of-the-gods-2.png
 // and https://github.com/thinkaurelius/titan/wiki/Getting-Started
 // for more details about this graph
@@ -13,7 +12,7 @@ test('hercules battled more than once', function(t) {
   g.V('hercules')
    .outE(battledMoreThanOnce)
    .inV()
-   .on('data', function (vertex) {
+   .forEach(function (vertex) {
      t.ok(['hydra', 'cerberus'].indexOf(vertex.id) !== -1, 'Hydra and Cerberus');
    });
 
@@ -32,7 +31,7 @@ test('Oh pluto', function (t) {
     g.V('pluto')
      .out('brother')
      .out(lives)
-     .on('data', function (vertex) {
+     .forEach(function (vertex) {
        t.ok(['sky', 'sea'].indexOf(vertex.id) !== -1, 'Only on the sky and in the sea');
      });
   });
@@ -42,9 +41,8 @@ test('Oh pluto', function (t) {
     g.V('pluto')
      .out(lives)
      .in(lives)
-     .on('data', function(vertex) {
+     .forEach(function(vertex) {
        t.ok(['cerberus', 'pluto'].indexOf(vertex.id) !== -1, 'Only cerberus and pluto');
      });
   });
 });
-*/
