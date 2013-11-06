@@ -3,7 +3,7 @@
 module.exports = function(graph) {
   return {
     V: function createVertexStream(startFrom) {
-      var VertexPipe = require('./lib/streams/vertexPipe');
+      var VertexPipe = require('./lib/pipes/vertexPipe');
       var VertexIterator = require('./lib/utils/vertexIterator');
 
       var vertexPipe = new VertexPipe(graph);
