@@ -47,16 +47,19 @@ test('Visit filtered edges', function (t) {
   graph.addLink(1, 4, 'father'); graph.addLink(5, 1, 'father');
 
   g = shremlin(graph);
-  t.plan(1);
+  t.plan(2);
   g.V(5)
    .outE('father')
    .forEach(function (edge) {
      t.equal(edge.toId, 1, 'Father of 5 is 1');
    });
 
-//   .inV()
-//   .outE('father')
-//   .forEach(function(edge) {
-//     t.equal(edge.toId, 4, 'Father of 1 is 4');
-//   });
+  g.V(5)
+   .outE('father')
+   .inV()
+   .outE('father')
+   .forEach(function(edge) {
+     t.equal(edge.toId, 4, 'Father of 1 is 4');
+   });
+   // todo: more tests for bothE, inE
 });
