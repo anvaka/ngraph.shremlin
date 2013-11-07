@@ -47,7 +47,7 @@ test('Visit filtered edges', function (t) {
   graph.addLink(1, 4, 'father'); graph.addLink(5, 1, 'father');
 
   g = shremlin(graph);
-  t.plan(2);
+  t.plan(5);
   g.V(5)
    .outE('father')
    .forEach(function (edge) {
@@ -61,5 +61,18 @@ test('Visit filtered edges', function (t) {
    .forEach(function(edge) {
      t.equal(edge.toId, 4, 'Father of 1 is 4');
    });
-   // todo: more tests for bothE, inE
+
+  g.V(5)
+   .outE('father')
+   .bothV()
+   .forEach(function(vertex) {
+     t.ok([5, 1].indexOf(vertex.id) > -1, 'Both 1 and 5 should be returned');
+   });
+
+  g.V(5)
+   .outE('father')
+   .outV()
+   .forEach(function(vertex) {
+     t.equal(vertex.id, 5, 'Should come back to where it started');
+   });
 });
