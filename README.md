@@ -45,3 +45,31 @@ g.V(1)
  });
 
 ```
+
+Shremlin uses simple composable steps to achieve complex iterations. E.g. this is how you can get all "grandshildren" of our graph: 
+``` js
+// Remember our graph?
+// 0 → 1 → 2
+// ↓   ↓   ↓  
+// 3 → 4 → 5
+g.V(1)
+ .out() // first level children of node 1. It is node 2 and node 4
+ .out() // second level children of node 1. I.e. children of node 2 and node 4. It is node 5
+ .forEach(function(node) {
+   console.log(node.id); // prints 5 two times
+ });
+
+// You can also print path through which we got to last node:
+g.V(1)
+ .out() 
+ .out() 
+ .path()
+ .forEach(function(path) {
+   // each element of the path is actual node instance.
+   for(var i = 0; i < path.length; ++i) { console.log(path[i].id); }
+ }); // prints 1, 2, 5 and 1, 4, 5
+```
+
+Word of caution
+===============
+This is all work in progress. Even at the current early stage this library is powerful enough to perform complex filtering during traversal. See [graph of gods](https://github.com/anvaka/ngraph.shremlin/blob/master/test/graphOfGods.js#L1) test for more info.
