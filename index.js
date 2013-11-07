@@ -13,5 +13,5 @@ module.exports = function(graph) {
   };
 };
 
-var extendGraphStreams = require('./lib/streamExtensions');
-extendGraphStreams();
+var extendIterators = require('./lib/pipeExtensions');
+extendIterators();
