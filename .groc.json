@@ -1,0 +1,3 @@
+{
+  "glob": ["lib/**/*.js", "index.js"]
+}
