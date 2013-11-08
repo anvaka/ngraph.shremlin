@@ -73,7 +73,7 @@ function createGraphIterators(graph) {
       var VertexIterator = require('./lib/utils/vertexIterator');
 
       var vertexPipe = new VertexPipe(graph);
-      vertexPipe.setStarts(new VertexIterator(graph, startFrom));
+      vertexPipe.setSourcePipe(new VertexIterator(graph, startFrom));
       return vertexPipe;
     }
   };
