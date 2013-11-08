@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head><title>pipes/vertexPipe</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="pipes/vertexPipe"><meta name="groc-project-path" content="lib/pipes/vertexPipe.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/lib/pipes/vertexPipe.js">lib/pipes/vertexPipe.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><p>VertexPipe is a starting point to iterate over vertices of a graph.
+You access it by calling <code>g.V()</code>. Even though name <code>V</code> is
+really obscure, I tried to replicated gremin DSL. Maybe it should be changed
+or aliased to friendly name (e.g. <code>Vertices</code> or <code>Nodes</code>).</p>
+
+<pre><code> var shremlin = require('ngraph.shremlin');
+ var g = shremlin(graph);
+ g.V()
+  .forEach(function(vertex) {
+    console.log(vertex.id);
+    // prints all node ids in the graph
+  });
+</code></pre>
+
+<p>You can also pass a vertex id from which you want to start your iteration:</p>
+
+<pre><code> g.V(42) // start from node with id 42
+  .forEach(function(vertex) {
+    console.log(vertex.id); // prints 42
+  });
+</code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">VertexPipe</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">BasePipe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../basePipe&#39;</span><span class="p">),</span>
+    <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">VertexPipe</span><span class="p">,</span> <span class="nx">BasePipe</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">VertexPipe</span><span class="p">(</span><span class="nx">graph</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="k">this</span> <span class="k">instanceof</span> <span class="nx">VertexPipe</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">VertexPipe</span><span class="p">(</span><span class="nx">graph</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">BasePipe</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_graph</span> <span class="o">=</span> <span class="nx">graph</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">VertexPipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_moveNext</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_starts</span><span class="p">.</span><span class="nx">moveNext</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_current</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_starts</span><span class="p">.</span><span class="nx">current</span><span class="p">();</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">};</span></div></div></div></div></body></html>

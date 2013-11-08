@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="en"><head><title>iterators/emptyIterator</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="iterators/emptyIterator"><meta name="groc-project-path" content="lib/iterators/emptyIterator.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/lib/iterators/emptyIterator.js">lib/iterators/emptyIterator.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">createEmptyIterator</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">emptyIteratorInstance</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">createEmptyIterator</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>it's like a singleton.</p></div></div><div class="code"><div class="wrapper">  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">emptyIteratorInstance</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">emptyIteratorInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EmptyIterator</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">emptyIteratorInstance</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">EmptyIterator</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="k">this</span> <span class="k">instanceof</span> <span class="nx">EmptyIterator</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">EmptyIterator</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">EmptyIterator</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">moveNext</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">EmptyIterator</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">current</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="p">}</span></div></div></div></div></body></html>

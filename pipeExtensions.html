@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="en"><head><title>pipeExtensions</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="pipeExtensions"><meta name="groc-project-path" content="lib/pipeExtensions.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/lib/pipeExtensions.js">lib/pipeExtensions.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">VerticesToVerticesPipe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./pipes/verticesToVerticesPipe&#39;</span><span class="p">),</span>
+    <span class="nx">VerticesPipe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./pipes/vertexPipe&#39;</span><span class="p">),</span>
+    <span class="nx">PathPipe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./pipes/pathPipe&#39;</span><span class="p">),</span>
+    <span class="nx">EdgesToVerticesPipe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./pipes/edgesToVerticesPipe&#39;</span><span class="p">),</span>
+    <span class="nx">VerticesToEdgesPipe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./pipes/verticesToEdgesPipe&#39;</span><span class="p">);</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">extendGraphStreams</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">extendGraphStreams</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">verticesStreams</span> <span class="o">=</span> <span class="p">[</span><span class="nx">VerticesPipe</span><span class="p">,</span> <span class="nx">VerticesToVerticesPipe</span><span class="p">,</span> <span class="nx">EdgesToVerticesPipe</span><span class="p">];</span>
+  <span class="kd">var</span> <span class="nx">edgesStreams</span> <span class="o">=</span> <span class="p">[</span><span class="nx">VerticesToEdgesPipe</span><span class="p">];</span>
+
+  <span class="nx">verticesStreams</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">extendVerticesStream</span><span class="p">(</span><span class="nx">stream</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="nx">edgesStreams</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">extendEdgesStream</span><span class="p">(</span><span class="nx">stream</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">extendVerticesStream</span><span class="p">(</span><span class="nx">sourceStreamPrototype</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pipes source stream of vertices into stream which
+produces adjacent vertices, connected by head of an edge.</p>
+
+<p>Example:
+  A -> B -> C
+  g.V('B').out() - emits C</p></div></div><div class="code"><div class="wrapper">  <span class="nx">sourceStreamPrototype</span><span class="p">.</span><span class="nx">out</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VerticesToVerticesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;out&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pipes source stream of vertices into stream which
+produces adjacent vertices, connected by tail of an edge.</p>
+
+<p>Example:
+  A -> B -> C
+  g.V('B').in() - emits A</p></div></div><div class="code"><div class="wrapper">  <span class="nx">sourceStreamPrototype</span><span class="p">.</span><span class="k">in</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VerticesToVerticesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pipes source stream of vertices into stream which
+produces adjacent vertices from both sides of an edge</p>
+
+<p>Example:
+  A -> B -> C
+  g.V('B').both() - emits A and C</p></div></div><div class="code"><div class="wrapper">  <span class="nx">sourceStreamPrototype</span><span class="p">.</span><span class="nx">both</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VerticesToVerticesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span>
+
+  <span class="nx">sourceStreamPrototype</span><span class="p">.</span><span class="nx">path</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">PathPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">));</span>
+  <span class="p">};</span>
+
+  <span class="nx">sourceStreamPrototype</span><span class="p">.</span><span class="nx">outE</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VerticesToEdgesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;out&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span>
+
+  <span class="nx">sourceStreamPrototype</span><span class="p">.</span><span class="nx">inE</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VerticesToEdgesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span>
+
+  <span class="nx">sourceStreamPrototype</span><span class="p">.</span><span class="nx">bothE</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VerticesToEdgesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">extendEdgesStream</span><span class="p">(</span><span class="nx">sourceStreamPrototype</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns vertices at the tail of an edge.
+ E.g. A --> B - returns A</p></div></div><div class="code"><div class="wrapper">  <span class="nx">sourceStreamPrototype</span><span class="p">.</span><span class="nx">outV</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">EdgesToVerticesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;out&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns vertices at the head of an edge.
+ E.g. A --> B - returns B</p></div></div><div class="code"><div class="wrapper">  <span class="nx">sourceStreamPrototype</span><span class="p">.</span><span class="nx">inV</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">EdgesToVerticesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns both from and to vertices of an edge
+ E.g. A --> B - returns A and B</p></div></div><div class="code"><div class="wrapper">  <span class="nx">sourceStreamPrototype</span><span class="p">.</span><span class="nx">bothV</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">EdgesToVerticesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span>
+<span class="p">}</span></div></div></div></div></body></html>
