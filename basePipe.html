@@ -3,35 +3,38 @@
 <p>Graph traversal operations in Shremlin are achieved by pipes. Pipes accept
 input data, and emit transformed data. E.g. <code>VerticesToVerticesPipe</code>
 accepts a vertex as an input and emits adjacent vertices (neighbors). Since
-each of emitted objects are also vertices, they can also serve as an input
-to <code>VerticesToVerticesPipe</code></p>
+each emitted object is also a vertex, it can be used as an input
+to next <code>VerticesToVerticesPipe</code></p>
 
-<p><code>BasePipe</code> serves as an abstract base class for all pipes in Shremlin</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">BasePipe</span><span class="p">;</span>
+<p><code>BasePipe</code> serves as an abstract base class for all pipes in Shremlin</p>
+
+<p><em>NB:</em> If you are familiar with concept of <a href="http://msdn.microsoft.com/en-us/library/78dfe2yb.aspx">Enumerators</a>
+in .NET this should be familiar. Like <code>Enumerators</code> Pipes have <code>current()</code>
+and <code>moveNext()</code> methods. On top of this Pipes are chained into each other
+thus one pipe serves as a data source to another</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">BasePipe</span><span class="p">;</span>
 
 <span class="kd">function</span> <span class="nx">BasePipe</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">_current</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">_starts</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-<span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>If you are familiar with concept of Enumerable objects in .NET
-this should be familiar. <code>current()</code> should return
-current element of collection. If collection is empty, and you call
-<code>current()</code> method - undefined value is returned.</p></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">current</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_sourcePipe</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
+<span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>current()</code> should return current element of collection. If collection is
+empty, then undefined value is returned.</p></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">current</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
   <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_current</span><span class="p">;</span>
 <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>moveNext()</code> tries to move <code>current</code> element to next position. If
-moved successfuly this method returns true. Otherwise false</p></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">moveNext</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Each child of <code>BasePipe</code> should provide concrete implementation
-of <code>_moveNext</code>.</p></div></div><div class="code"><div class="wrapper">  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_moveNext</span><span class="p">())</span> <span class="p">{</span>
+moved successfuly this method returns true. Otherwise false</p></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">moveNext</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_moveNext</span><span class="p">())</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">_current</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">current</span><span class="p">();</span>
     <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
   <span class="p">}</span>
-  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-<span class="p">};</span>
 
-<span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_moveNext</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">startsIterators</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Each child of <code>BasePipe</code> should provide concrete implementation
+of <code>_moveNext</code>.</p></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_moveNext</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">startsIterators</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;This method should be implemented by children&#39;</span><span class="p">);</span>
-<span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>TODO: continue from here. Taking a break before moving on</p></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setStarts</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">startsIterators</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>todo: validate iterator</p></div></div><div class="code"><div class="wrapper">  <span class="k">this</span><span class="p">.</span><span class="nx">_starts</span> <span class="o">=</span> <span class="nx">startsIterators</span><span class="p">;</span>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>TODO: continue from here. Taking a break before moving on</p></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setSourcePipe</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">sourcePipe</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>todo: validate iterator</p></div></div><div class="code"><div class="wrapper">  <span class="k">this</span><span class="p">.</span><span class="nx">_sourcePipe</span> <span class="o">=</span> <span class="nx">sourcePipe</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getCurrentPath</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">pathToHere</span> <span class="o">=</span> <span class="nx">getPathToHere</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_starts</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">pathToHere</span> <span class="o">=</span> <span class="nx">getPathToHere</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_sourcePipe</span><span class="p">);</span>
   <span class="nx">pathToHere</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_current</span><span class="p">);</span>
 
   <span class="k">return</span> <span class="nx">pathToHere</span><span class="p">;</span>
@@ -49,7 +52,7 @@ of <code>_moveNext</code>.</p></div></div><div class="code"><div class="wrapper"
 <span class="p">};</span>
 
 <span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">pipe</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">dst</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">dst</span><span class="p">.</span><span class="nx">setStarts</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="nx">dst</span><span class="p">.</span><span class="nx">setSourcePipe</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
   <span class="k">return</span> <span class="nx">dst</span><span class="p">;</span>
 <span class="p">};</span>
 

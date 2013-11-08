@@ -199,7 +199,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "projectPath": "lib/pipes/vertexPipe.js",
             "targetPath": "pipes/vertexPipe",
             "pageTitle": "pipes/vertexPipe",
-            "title": "vertexPipe"
+            "firstHeader": {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Vertex Pipe",
+                "slug": "vertex-pipe",
+                "isFileHeader": true
+              },
+              "depth": 1
+            },
+            "title": "Vertex Pipe"
           },
           "depth": 2,
           "outline": []

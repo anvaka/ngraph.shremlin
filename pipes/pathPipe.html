@@ -14,8 +14,8 @@
 <span class="p">}</span>
 
 <span class="nx">PathPipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_moveNext</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_starts</span><span class="p">.</span><span class="nx">moveNext</span><span class="p">())</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">_current</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_starts</span><span class="p">.</span><span class="nx">getCurrentPath</span><span class="p">();</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_sourcePipe</span><span class="p">.</span><span class="nx">moveNext</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_current</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_sourcePipe</span><span class="p">.</span><span class="nx">getCurrentPath</span><span class="p">();</span>
     <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
