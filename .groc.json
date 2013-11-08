@@ -1,3 +1,4 @@
 {
-  "glob": ["lib/**/*.js", "index.js"]
+  "glob": ["lib/**/*.js", "index.js"],
+  "github": true
 }
