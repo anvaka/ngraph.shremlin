@@ -14,35 +14,35 @@
  *   // create graph iterator:
  *   var g = shremlin(graph);
  *
- *   // How to iterate all graph nodes?
+ *   // How to iterate all graph vertices?
  *   g.V()
- *    .forEach(function(node) {
- *      console.log(node.id); // prints 0..5;
+ *    .forEach(function(vertex) {
+ *      console.log(vertex.id); // prints 0..5;
  *    });
  *
- *   // How to get node with id "1"?
+ *   // How to get vertex with id "1"?
  *   g.V(1)
- *    .forEach(function(node) {
- *      console.log(node.id); // prints only 1;
+ *    .forEach(function(vertex) {
+ *      console.log(vertex.id); // prints only 1;
  *    });
  *
- *   // Let's print all neighbors of node 1, reachable via
+ *   // Let's print all neighbors of vertex 1, reachable via
  *   // outgoing edge:
  *   g.V(1)
  *    .out() // get all outgoing neighbors.
- *    .forEach(function(node) {
- *      console.log(node.id); // prints 2, 4;
+ *    .forEach(function(vertex) {
+ *      console.log(vertex.id); // prints 2, 4;
  *    });
  *
  *   // How about roots of incoming edges?
  *   g.V(1)
  *    .in() // get all "incoming" neighbors
- *    .forEach(function(node) {
- *      console.log(node.id); // prints 0;
+ *    .forEach(function(vertex) {
+ *      console.log(vertex.id); // prints 0;
  *    });
  * ```
  *
- * Now that you understna basics, let's move on to the file
+ * Now that you understand basics, let's move on to the file
  */
 
 "use strict";
