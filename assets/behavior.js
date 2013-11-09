@@ -439,7 +439,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "projectPath": "lib/utils/filterExpression.js",
             "targetPath": "utils/filterExpression",
             "pageTitle": "utils/filterExpression",
-            "title": "filterExpression"
+            "firstHeader": {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Filtering Pipes",
+                "slug": "filtering-pipes",
+                "isFileHeader": true
+              },
+              "depth": 1
+            },
+            "title": "Filtering Pipes"
           },
           "depth": 2,
           "outline": []

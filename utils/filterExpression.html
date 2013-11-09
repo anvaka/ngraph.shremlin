@@ -1,6 +1,71 @@
-<!DOCTYPE html><html lang="en"><head><title>utils/filterExpression</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="utils/filterExpression"><meta name="groc-project-path" content="lib/utils/filterExpression.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/lib/utils/filterExpression.js">lib/utils/filterExpression.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">createFilter</span><span class="p">;</span>
+<!DOCTYPE html><html lang="en"><head><title>utils/filterExpression</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="utils/filterExpression"><meta name="groc-project-path" content="lib/utils/filterExpression.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/lib/utils/filterExpression.js">lib/utils/filterExpression.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="filtering-pipes">Filtering Pipes</h1>
 
-<span class="kd">function</span> <span class="nx">createFilter</span><span class="p">(</span><span class="nx">filterExpression</span><span class="p">)</span> <span class="p">{</span>
+<p>Each step of the Pipeline can be filtered. For example when we need to visit
+vertices connected by outgoing edge, where edge's data satisfies certain
+rules, filters can be used.</p>
+
+<p>Most of the <a href="../pipeSugar.html">Syntactic Sugar</a> extensions support filters:</p>
+
+<pre><code>  g.V() // get all nodes
+   // visit vertices via outgoing edges with data === 42:
+   .out(42)
+   // visit vertices via incoming edges with
+   // data.action === 'battled'
+   .in({ action: 'battled'})
+   // and so on
+</code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">createFilter</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>This method creates custom filter predicate based on <code>filterExpression</code>
+value.</p>
+
+<p>When <code>filterExpression</code> is a simple type (Number, String or Boolean), then
+returned predicat compares <code>data</code> property directly with that value:</p>
+
+<pre><code>  var match42 = createFilter(42);
+  // this will print true:
+  console.log(match42({data: 42}));
+</code></pre>
+
+<p>You might be wondering why it compares against <code>data</code> property, not object
+directly (<code>match42(42)</code>)? It is thank to the fact, that each vertex or
+edge of <a href="https://github.com/anvaka/VivaGraphJS">VivaGraph</a>/<a href="https://github.com/anvaka/ngraph.graph">ngraph</a>
+is stored within <code>xxx.data</code> property.</p>
+
+<p>If you want to filter against direct object attributes, you can pass custom
+<code>filterExpression</code> as a <code>function</code>:</p>
+
+<pre><code>  var match42 = createFiliter(function (obj) {
+    return obj === 42;
+  });
+  // Now this will print true:
+  console.log(match42(42));
+</code></pre>
+
+<p>When <code>filterExpression</code> is an array, then <code>data</code> property should also be
+an array (or array-like) object, with the same elements:</p>
+
+<pre><code> var matchArray = createFilter([40, 2]);
+ // prints true:
+ console.log(matchArray({ data: [40, 2] });
+</code></pre>
+
+<p>Finally you can pass <code>filterExpression</code> as an <code>object</code>, in which case
+<code>data</code> attribute should have all properties of <code>filterExpression</code>
+and they all should be equal to values of your <code>filterExpression</code>:</p>
+
+<pre><code>  var matchJohnSmith = createFilter({
+    firstName: 'John',
+    lastName: 'Smith'
+  });
+
+  // true:
+  matchJohnSmith({
+    data: { firstName: 'John', lastName: 'Smith' }
+  });
+
+  // false (missing lastName):
+  matchJohnSmith({
+    data: { firstName: 'John' }
+  });
+</code></pre></div></div><div class="code"><div class="wrapper"><span class="kd">function</span> <span class="nx">createFilter</span><span class="p">(</span><span class="nx">filterExpression</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">filterExpression</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Filter expression should be defined&#39;</span><span class="p">);</span>
   <span class="p">}</span>
@@ -11,7 +76,9 @@
     <span class="k">return</span> <span class="nx">customPredicateFilter</span><span class="p">(</span><span class="nx">filterExpression</span><span class="p">);</span>
   <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">filterExpression</span><span class="p">))</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">arrayFilter</span><span class="p">(</span><span class="nx">filterExpression</span><span class="p">);</span>
-  <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>at this point only object type is possible:</p></div></div><div class="code"><div class="wrapper">  <span class="k">return</span> <span class="nx">customObjectFilter</span><span class="p">(</span><span class="nx">filterExpression</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="nx">customObjectFilter</span><span class="p">(</span><span class="nx">filterExpression</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kd">function</span> <span class="nx">isCustomPredicate</span> <span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
