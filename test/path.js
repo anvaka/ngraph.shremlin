@@ -65,3 +65,35 @@ test('Get path from Hercules', function (t) {
      });
   })
 });
+
+test('Get path with edges', function (t) {
+  // A -- edge AB --> B -- edge BC --> C
+  var graph = require('ngraph.graph')();
+  graph.addLink('A', 'B', 'AB');
+  graph.addLink('B', 'C', 'BC');
+  var g = require('..')(graph);
+
+  t.test('Visit outgoing edge', function (t) {
+    g.V('B')
+     .outE()
+     .path()
+     .forEach(function (path) {
+       t.equal(path.length, 2, 'Path length is correct');
+       t.equal(path[0].id, 'B', 'Path start is expected');
+       t.equal(path[1].fromId, 'B', 'Path start is expected');
+       t.equal(path[1].toId, 'C', 'Path end is expected');
+     });
+     t.end();
+  });
+
+  t.test('Visit both edges', function (t) {
+    t.plan(2); // two edges for node B
+    g.V('B')
+     .bothE()
+     .path()
+     .forEach(function (path) {
+       t.equal(path.length, 2, 'Path length is correct');
+     });
+     t.end();
+  });
+});
