@@ -46,8 +46,6 @@ test('Get nodes matching predicate', function(t) {
       },
       g = shremlin(pathGraph);
 
-
-  debugger;
   g.V(vertexFilter).forEach(function (vertex) {
     t.ok(vertexFilter(vertex), "Start vertext should be valid");
   });
