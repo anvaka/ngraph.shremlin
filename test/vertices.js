@@ -28,7 +28,6 @@ test('Get specific node', function(t) {
 });
 
 test('Get multiple nodes', function(t) {
-
   var pathGraph = generators.path(10),
       startNodeIds = [0, 1, 2],
       g = shremlin(pathGraph);
@@ -38,4 +37,19 @@ test('Get multiple nodes', function(t) {
   g.V(startNodeIds).forEach(function (vertex) {
     t.ok(startNodeIds.indexOf(vertex.id) > -1, "Start vertext should be valid");
   });
+});
+
+test('Get nodes matching predicate', function(t) {
+  var pathGraph = generators.path(10),
+      vertexFilter = function (v) {
+        return v.id < 2; // it's only 0, 1 and 2
+      },
+      g = shremlin(pathGraph);
+
+
+  debugger;
+  g.V(vertexFilter).forEach(function (vertex) {
+    t.ok(vertexFilter(vertex), "Start vertext should be valid");
+  });
+  t.end();
 });
