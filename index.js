@@ -1,5 +1,6 @@
 /**
- * # ngraph.shremlin
+ * # Introduction
+ *
  * This is a graph traversal library, inspired by
  * [gremlin](https://github.com/tinkerpop/gremlin)
  *
