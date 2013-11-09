@@ -96,8 +96,8 @@ to perform lazy iteration.</p>
     <span class="p">}</span>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">filterPredicate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_startFrom</span> <span class="o">||</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Unfortunately this means we have to visit each node of the graph
-Which makes "lazy" initialization not so lazy. Idially this should be
-fixed within core librarires (vivagraph or ngraph):</p></div></div><div class="code"><div class="wrapper">    <span class="kd">var</span> <span class="nx">allNodes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_allNodes</span><span class="p">;</span>
+Which makes "lazy" initialization not so lazy. Ideally this should be
+fixed within core libraries (vivagraph or ngraph):</p></div></div><div class="code"><div class="wrapper">    <span class="kd">var</span> <span class="nx">allNodes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_allNodes</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">.</span><span class="nx">forEachNode</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">filterPredicate</span><span class="p">(</span><span class="nx">node</span><span class="p">))</span> <span class="p">{</span>
         <span class="nx">allNodes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
