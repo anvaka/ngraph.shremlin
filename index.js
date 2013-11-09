@@ -81,5 +81,5 @@ function createGraphIterators(graph) {
 
 // Add syntatic sugar on top of each iterator, so that you can
 // chain them together.
-var extendIterators = require('./lib/pipeExtensions');
+var extendIterators = require('./lib/pipeSugar');
 extendIterators();
