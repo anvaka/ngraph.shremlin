@@ -71,7 +71,7 @@ function createGraphIterators(graph) {
      */
     V: function createVertexStream(startFrom) {
       var VertexPipe = require('./lib/pipes/vertexPipe');
-      var VertexIterator = require('./lib/utils/vertexIterator');
+      var VertexIterator = require('./lib/iterators/vertexIterator');
 
       var vertexPipe = new VertexPipe(graph);
       vertexPipe.setSourcePipe(new VertexIterator(graph, startFrom));
