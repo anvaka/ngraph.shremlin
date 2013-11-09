@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="en"><head><title>iterators/vertexIterator</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="iterators/vertexIterator"><meta name="groc-project-path" content="lib/iterators/vertexIterator.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/lib/iterators/vertexIterator.js">lib/iterators/vertexIterator.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="vertex-iterator">Vertex Iterator</h1>
+
+<p>Since neither <a href="https://github.com/anvaka/VivaGraphJS">VivaGraph</a> nor
+<a href="https://github.com/anvaka/ngraph.graph">ngraph.graph</a> currently support
+iterators to iterate over edges or vertices, we build this facility here.
+Ideally though, it should be part of those libraries (<em>TODO</em>).</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">VertexIterator</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Vertex Iterator provides a simple wrapper over <code>graph.forEachNode</code>
+to perform lazy iteration.</p>
+
+<p><code>startFrom</code> argument is optional and has the following meaning:</p>
+
+<p><em>Not passed</em> - Iterate over all vertices of a <code>graph</code>:</p>
+
+<pre><code>  var iterator = new VertexIterator(graph);
+
+  while (iterator.moveNext()) {
+    // prints all vertices:
+    console.log(iterator.current());
+  }
+</code></pre>
+
+<p><em>Array</em> - Iterate over all vertices with matching identifiers from array:</p>
+
+<pre><code>  var iterator = new VertexIterator(graph, [0, 1]);
+
+  while (iterator.moveNext()) {
+    // prints two vertices with identifier 0 or 1:
+    console.log(iterator.current());
+  }
+</code></pre>
+
+<p><em>Function</em> - Iterate over all vertices which match function predicate:</p>
+
+<pre><code>  var filter = function (vertex) { return false; },
+      iterator = new VertexIterator(graph, filter);
+
+  while (iterator.moveNext()) {
+    console.log('This will never be shown');
+  }
+</code></pre>
+
+<p><em>Anything else</em> - Consider it as starting vertex id:</p>
+
+<pre><code>  var iterator = new VertexIterator(graph, 42);
+
+  while (iterator.moveNext()) {
+    // this will print single node with id == 42;
+    console.log(iterator.current());
+  }
+</code></pre></div></div><div class="code"><div class="wrapper"><span class="kd">function</span> <span class="nx">VertexIterator</span><span class="p">(</span><span class="nx">graph</span><span class="p">,</span> <span class="nx">startFrom</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">graph</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Graph is required by VertexIterator&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">this</span><span class="p">.</span><span class="nx">_graph</span> <span class="o">=</span> <span class="nx">graph</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_startFrom</span> <span class="o">=</span> <span class="nx">startFrom</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_currentIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_allNodes</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_initialized</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_current</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">VertexIterator</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">moveNext</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_initialized</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">initialize</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_initialized</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_currentIndex</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_allNodes</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_current</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_allNodes</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">_currentIndex</span><span class="o">++</span><span class="p">];</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">VertexIterator</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">current</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_current</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">initialize</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">graph</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span>
+      <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">),</span>
+      <span class="nx">node</span><span class="p">;</span>
+      <span class="kr">debugger</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_startFrom</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_startFrom</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">node</span> <span class="o">=</span> <span class="nx">graph</span><span class="p">.</span><span class="nx">getNode</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_startFrom</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_allNodes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="sr">/function|undefined/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">_startFrom</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">node</span> <span class="o">=</span> <span class="nx">graph</span><span class="p">.</span><span class="nx">getNode</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_startFrom</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_allNodes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">filterPredicate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_startFrom</span> <span class="o">||</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Unfortunately this means we have to visit each node of the graph
+Which makes "lazy" initialization not so lazy. Idially this should be
+fixed within core librarires (vivagraph or ngraph):</p></div></div><div class="code"><div class="wrapper">    <span class="kd">var</span> <span class="nx">allNodes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_allNodes</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">.</span><span class="nx">forEachNode</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">filterPredicate</span><span class="p">(</span><span class="nx">node</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">allNodes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">}</span></div></div></div></div></body></html>

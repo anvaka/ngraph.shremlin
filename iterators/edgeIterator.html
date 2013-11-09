@@ -1,7 +1,43 @@
-<!DOCTYPE html><html lang="en"><head><title>iterators/edgeIterator</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="iterators/edgeIterator"><meta name="groc-project-path" content="lib/iterators/edgeIterator.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/lib/iterators/edgeIterator.js">lib/iterators/edgeIterator.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">createEdgeIterator</span><span class="p">;</span>
+<!DOCTYPE html><html lang="en"><head><title>iterators/edgeIterator</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="iterators/edgeIterator"><meta name="groc-project-path" content="lib/iterators/edgeIterator.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/lib/iterators/edgeIterator.js">lib/iterators/edgeIterator.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="edge-iterator">Edge Iterator</h1>
 
-<span class="kd">function</span> <span class="nx">createEdgeIterator</span><span class="p">(</span><span class="nx">startFrom</span><span class="p">,</span> <span class="nx">matchFilter</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>This should be part of ngraph.graph, I believe
-todo: check matchfilter</p></div></div><div class="code"><div class="wrapper">  <span class="kd">var</span> <span class="nx">links</span> <span class="o">=</span> <span class="nx">startFrom</span><span class="p">.</span><span class="nx">links</span><span class="p">,</span>
+<p>Since neither <a href="https://github.com/anvaka/VivaGraphJS">VivaGraph</a> nor
+<a href="https://github.com/anvaka/ngraph.graph">ngraph.graph</a> currently support
+iterators to iterate over edges or vertices, we build this facility here.
+Ideally though, it should be part of those libraries (<em>TODO</em>).</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">createEdgeIterator</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>This iterator iterates over all edges for a given vertex.
+You can optionally pass a <code>matchFilter(edge, vertexId)</code> callback,
+to decide whether or not you want to include given edge into results.</p>
+
+<p>Example (Iterate over all edges):</p>
+
+<pre><code> var startFrom = graph.getNode(42),
+     edges = createEdgeIterator(startFrom);
+
+ while(edges.moveNext()) {
+   // print all edges (incoming and outgoing)
+   console.log(edges.current());
+ }
+</code></pre>
+
+<p>Example (Iterate over incoming edges):</p>
+
+<pre><code> var startFrom = graph.getNode(42),
+     incomingOnly = function (edge, vertexId) {
+       return edge.toId === vertexId;
+     },
+     edges = createEdgeIterator(startFrom, incomingOnly);
+
+ while(edges.moveNext()) {
+   // print incoming edges only
+   console.log(edges.current());
+ }
+</code></pre></div></div><div class="code"><div class="wrapper"><span class="kd">function</span> <span class="nx">createEdgeIterator</span><span class="p">(</span><span class="nx">vertex</span><span class="p">,</span> <span class="nx">matchFilter</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">vertex</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Vertex should be defined in edge iterator&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">matchFilter</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">matchFilter</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">?</span>
+                  <span class="nx">matchFilter</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>We rely on internal structure of vertex here. Which is not good.
+This is one of the reasons why I think this code belongs to core library</p></div></div><div class="code"><div class="wrapper">  <span class="kd">var</span> <span class="nx">links</span> <span class="o">=</span> <span class="nx">vertex</span><span class="p">.</span><span class="nx">links</span><span class="p">,</span>
       <span class="nx">currentEdge</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">,</span>
       <span class="nx">currentIdx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
@@ -9,7 +45,7 @@ todo: check matchfilter</p></div></div><div class="code"><div class="wrapper">  
     <span class="nx">moveNext</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
       <span class="k">while</span> <span class="p">(</span><span class="nx">currentIdx</span> <span class="o">&lt;</span> <span class="nx">links</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">edge</span> <span class="o">=</span> <span class="nx">links</span><span class="p">[</span><span class="nx">currentIdx</span><span class="o">++</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">matchFilter</span><span class="p">(</span><span class="nx">edge</span><span class="p">,</span> <span class="nx">startFrom</span><span class="p">.</span><span class="nx">id</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">matchFilter</span><span class="p">(</span><span class="nx">edge</span><span class="p">,</span> <span class="nx">vertex</span><span class="p">.</span><span class="nx">id</span><span class="p">))</span> <span class="p">{</span>
           <span class="nx">currentEdge</span> <span class="o">=</span> <span class="nx">edge</span><span class="p">;</span>
           <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
         <span class="p">}</span>

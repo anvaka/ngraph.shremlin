@@ -63,7 +63,7 @@ starting with a node.</p>
 
 <p><strong>Returns a VertexPipe</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">V</span><span class="o">:</span> <span class="kd">function</span> <span class="nx">createVertexStream</span><span class="p">(</span><span class="nx">startFrom</span><span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">VertexPipe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./lib/pipes/vertexPipe&#39;</span><span class="p">);</span>
-      <span class="kd">var</span> <span class="nx">VertexIterator</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./lib/utils/vertexIterator&#39;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">VertexIterator</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./lib/iterators/vertexIterator&#39;</span><span class="p">);</span>
 
       <span class="kd">var</span> <span class="nx">vertexPipe</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">VertexPipe</span><span class="p">(</span><span class="nx">graph</span><span class="p">);</span>
       <span class="nx">vertexPipe</span><span class="p">.</span><span class="nx">setSourcePipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VertexIterator</span><span class="p">(</span><span class="nx">graph</span><span class="p">,</span> <span class="nx">startFrom</span><span class="p">));</span>

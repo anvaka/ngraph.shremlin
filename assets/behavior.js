@@ -126,7 +126,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "projectPath": "lib/iterators/edgeIterator.js",
             "targetPath": "iterators/edgeIterator",
             "pageTitle": "iterators/edgeIterator",
-            "title": "edgeIterator"
+            "firstHeader": {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Edge Iterator",
+                "slug": "edge-iterator",
+                "isFileHeader": true
+              },
+              "depth": 1
+            },
+            "title": "Edge Iterator"
           },
           "depth": 2,
           "outline": []
@@ -146,7 +156,47 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "projectPath": "lib/iterators/emptyIterator.js",
             "targetPath": "iterators/emptyIterator",
             "pageTitle": "iterators/emptyIterator",
-            "title": "emptyIterator"
+            "firstHeader": {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Empty Iterator",
+                "slug": "empty-iterator",
+                "isFileHeader": true
+              },
+              "depth": 1
+            },
+            "title": "Empty Iterator"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/Users/anvaka/Documents/projects/ngraphjs/modules/ngraph.shremlin/lib/iterators/vertexIterator.js",
+            "projectPath": "lib/iterators/vertexIterator.js",
+            "targetPath": "iterators/vertexIterator",
+            "pageTitle": "iterators/vertexIterator",
+            "firstHeader": {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Vertex Iterator",
+                "slug": "vertex-iterator",
+                "isFileHeader": true
+              },
+              "depth": 1
+            },
+            "title": "Vertex Iterator"
           },
           "depth": 2,
           "outline": []
@@ -390,46 +440,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "targetPath": "utils/filterExpression",
             "pageTitle": "utils/filterExpression",
             "title": "filterExpression"
-          },
-          "depth": 2,
-          "outline": []
-        }, {
-          "type": "file",
-          "data": {
-            "language": {
-              "nameMatchers": [".js"],
-              "pygmentsLexer": "javascript",
-              "multiLineComment": ["/*", "*", "*/"],
-              "singleLineComment": ["//"],
-              "ignorePrefix": "}",
-              "foldPrefix": "^",
-              "name": "JavaScript"
-            },
-            "sourcePath": "/Users/anvaka/Documents/projects/ngraphjs/modules/ngraph.shremlin/lib/utils/pathTracking.js",
-            "projectPath": "lib/utils/pathTracking.js",
-            "targetPath": "utils/pathTracking",
-            "pageTitle": "utils/pathTracking",
-            "title": "pathTracking"
-          },
-          "depth": 2,
-          "outline": []
-        }, {
-          "type": "file",
-          "data": {
-            "language": {
-              "nameMatchers": [".js"],
-              "pygmentsLexer": "javascript",
-              "multiLineComment": ["/*", "*", "*/"],
-              "singleLineComment": ["//"],
-              "ignorePrefix": "}",
-              "foldPrefix": "^",
-              "name": "JavaScript"
-            },
-            "sourcePath": "/Users/anvaka/Documents/projects/ngraphjs/modules/ngraph.shremlin/lib/utils/vertexIterator.js",
-            "projectPath": "lib/utils/vertexIterator.js",
-            "targetPath": "utils/vertexIterator",
-            "pageTitle": "utils/vertexIterator",
-            "title": "vertexIterator"
           },
           "depth": 2,
           "outline": []
