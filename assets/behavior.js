@@ -25,13 +25,13 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "type": "heading",
           "data": {
             "level": 1,
-            "title": "ngraph.shremlin",
-            "slug": "ngraphshremlin",
+            "title": "Introduction",
+            "slug": "introduction",
             "isFileHeader": true
           },
           "depth": 1
         },
-        "title": "ngraph.shremlin"
+        "title": "Introduction"
       },
       "depth": 1,
       "outline": []
@@ -59,12 +59,49 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "slug": "base-pipe",
             "isFileHeader": true
           },
-          "depth": 1
+          "depth": 1,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Pipe iteration",
+                "slug": "pipe-iteration"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Getting path",
+                "slug": "getting-path"
+              },
+              "depth": 2
+            }
+          ]
         },
         "title": "Base Pipe"
       },
       "depth": 1,
-      "outline": []
+      "outline": [
+        {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Pipe iteration",
+            "slug": "pipe-iteration"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Getting path",
+            "slug": "getting-path"
+          },
+          "depth": 2
+        }
+      ]
     }, {
       "type": "folder",
       "data": {
@@ -127,14 +164,77 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "foldPrefix": "^",
           "name": "JavaScript"
         },
-        "sourcePath": "/Users/anvaka/Documents/projects/ngraphjs/modules/ngraph.shremlin/lib/pipeExtensions.js",
-        "projectPath": "lib/pipeExtensions.js",
-        "targetPath": "pipeExtensions",
-        "pageTitle": "pipeExtensions",
-        "title": "pipeExtensions"
+        "sourcePath": "/Users/anvaka/Documents/projects/ngraphjs/modules/ngraph.shremlin/lib/pipeSugar.js",
+        "projectPath": "lib/pipeSugar.js",
+        "targetPath": "pipeSugar",
+        "pageTitle": "pipeSugar",
+        "firstHeader": {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "Syntactic Sugar",
+            "slug": "syntactic-sugar",
+            "isFileHeader": true
+          },
+          "depth": 1,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Pipes which take Vertices as input",
+                "slug": "pipes-which-take-vertices-as-input"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Pipes which take edges as input",
+                "slug": "pipes-which-take-edges-as-input"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Sugar for any kind of pipe",
+                "slug": "sugar-for-any-kind-of-pipe"
+              },
+              "depth": 2
+            }
+          ]
+        },
+        "title": "Syntactic Sugar"
       },
       "depth": 1,
-      "outline": []
+      "outline": [
+        {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Pipes which take Vertices as input",
+            "slug": "pipes-which-take-vertices-as-input"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Pipes which take edges as input",
+            "slug": "pipes-which-take-edges-as-input"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Sugar for any kind of pipe",
+            "slug": "sugar-for-any-kind-of-pipe"
+          },
+          "depth": 2
+        }
+      ]
     }, {
       "type": "folder",
       "data": {
@@ -179,7 +279,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "projectPath": "lib/pipes/pathPipe.js",
             "targetPath": "pipes/pathPipe",
             "pageTitle": "pipes/pathPipe",
-            "title": "pathPipe"
+            "firstHeader": {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Path Pipe",
+                "slug": "path-pipe",
+                "isFileHeader": true
+              },
+              "depth": 1
+            },
+            "title": "Path Pipe"
           },
           "depth": 2,
           "outline": []

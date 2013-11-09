@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="index.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/index.js">index.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="ngraphshremlin">ngraph.shremlin</h1>
+<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="index.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/index.js">index.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="introduction">Introduction</h1>
 
 <p>This is a graph traversal library, inspired by
 <a href="https://github.com/tinkerpop/gremlin">gremlin</a></p>
@@ -13,35 +13,35 @@ construction blocks. To best understand shremlin, let's start with example</p>
   // create graph iterator:
   var g = shremlin(graph);
 
-  // How to iterate all graph nodes?
+  // How to iterate all graph vertices?
   g.V()
-   .forEach(function(node) {
-     console.log(node.id); // prints 0..5;
+   .forEach(function(vertex) {
+     console.log(vertex.id); // prints 0..5;
    });
 
-  // How to get node with id "1"?
+  // How to get vertex with id "1"?
   g.V(1)
-   .forEach(function(node) {
-     console.log(node.id); // prints only 1;
+   .forEach(function(vertex) {
+     console.log(vertex.id); // prints only 1;
    });
 
-  // Let's print all neighbors of node 1, reachable via
+  // Let's print all neighbors of vertex 1, reachable via
   // outgoing edge:
   g.V(1)
    .out() // get all outgoing neighbors.
-   .forEach(function(node) {
-     console.log(node.id); // prints 2, 4;
+   .forEach(function(vertex) {
+     console.log(vertex.id); // prints 2, 4;
    });
 
   // How about roots of incoming edges?
   g.V(1)
    .in() // get all "incoming" neighbors
-   .forEach(function(node) {
-     console.log(node.id); // prints 0;
+   .forEach(function(vertex) {
+     console.log(vertex.id); // prints 0;
    });
 </code></pre>
 
-<p>Now that you understna basics, let's move on to the file</p></div></div><div class="code"><div class="wrapper"><span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+<p>Now that you understand basics, let's move on to the file</p></div></div><div class="code"><div class="wrapper"><span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">createGraphIterators</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Creates a wrapper to iterate over graph. A wrapper contains methods which
 allows you to begin iteration. Currently we support only vertices as iterator
@@ -71,5 +71,5 @@ starting with a node.</p>
     <span class="p">}</span>
   <span class="p">};</span>
 <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Add syntatic sugar on top of each iterator, so that you can
-chain them together.</p></div></div><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">extendIterators</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./lib/pipeExtensions&#39;</span><span class="p">);</span>
+chain them together.</p></div></div><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">extendIterators</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./lib/pipeSugar&#39;</span><span class="p">);</span>
 <span class="nx">extendIterators</span><span class="p">();</span></div></div></div></div></body></html>

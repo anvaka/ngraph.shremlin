@@ -1,6 +1,23 @@
-<!DOCTYPE html><html lang="en"><head><title>pipes/pathPipe</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="pipes/pathPipe"><meta name="groc-project-path" content="lib/pipes/pathPipe.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/lib/pipes/pathPipe.js">lib/pipes/pathPipe.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">PathPipe</span><span class="p">;</span>
+<!DOCTYPE html><html lang="en"><head><title>pipes/pathPipe</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="pipes/pathPipe"><meta name="groc-project-path" content="lib/pipes/pathPipe.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/lib/pipes/pathPipe.js">lib/pipes/pathPipe.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="path-pipe">Path Pipe</h1>
 
-<span class="kd">var</span> <span class="nx">BasePipe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../basePipe&#39;</span><span class="p">),</span>
+<p>PathPipe allows clients to understand how traversal algorithm
+reached given node. It takes as a source any type of <code>BasePipe</code>
+child, and emits array of objects (vertices, edges, etc.) through
+which it went to reach final point</p>
+
+<p>Example of traversal for <a href="https://raw.github.com/wiki/thinkaurelius/titan/images/graph-of-the-gods-2.png">Graph of Gods</a>:</p>
+
+<pre><code>  g.V('hercules')  // get 'hercules' vertex
+   .out('father')  // Who is father of Hercules?
+   .out('brother') // Get all Hercules uncles
+   .out('pet')     // Get pets of Hercules uncles.
+   .path()         // Get traversal path
+   .forEach(function (path) {
+     // path is array of vertices
+     // [hercules] -&gt; [father] -&gt; [brother] -&gt; [pet]
+     console.log(path);
+   });
+</code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">PathPipe</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>See also: <a href="../basePipe.html">BasePipe</a></p></div></div><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">BasePipe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../basePipe&#39;</span><span class="p">),</span>
     <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
 
 <span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">PathPipe</span><span class="p">,</span> <span class="nx">BasePipe</span><span class="p">);</span>

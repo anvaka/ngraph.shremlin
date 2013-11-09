@@ -16,7 +16,7 @@ thus one pipe serves as a data source to another</p></div></div><div class="code
 <span class="kd">function</span> <span class="nx">BasePipe</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">_current</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">_sourcePipe</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-<span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>current()</code> should return current element of collection. If collection is
+<span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="pipe-iteration">Pipe iteration</h2></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>current()</code> returns current element of collection. If collection is
 empty, then undefined value is returned.</p></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">current</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
   <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_current</span><span class="p">;</span>
 <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>moveNext()</code> tries to move <code>current</code> element to next position. If
@@ -30,17 +30,52 @@ moved successfuly this method returns true. Otherwise false</p></div></div><div 
 <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Each child of <code>BasePipe</code> should provide concrete implementation
 of <code>_moveNext</code>.</p></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_moveNext</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">startsIterators</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;This method should be implemented by children&#39;</span><span class="p">);</span>
-<span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>TODO: continue from here. Taking a break before moving on</p></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setSourcePipe</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">sourcePipe</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>todo: validate iterator</p></div></div><div class="code"><div class="wrapper">  <span class="k">this</span><span class="p">.</span><span class="nx">_sourcePipe</span> <span class="o">=</span> <span class="nx">sourcePipe</span><span class="p">;</span>
-<span class="p">};</span>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>This is how we tell current pipe where to read data from.</p>
 
-<span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getCurrentPath</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">pathToHere</span> <span class="o">=</span> <span class="nx">getPathToHere</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_sourcePipe</span><span class="p">);</span>
-  <span class="nx">pathToHere</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_current</span><span class="p">);</span>
+<p>Parameters:</p>
 
-  <span class="k">return</span> <span class="nx">pathToHere</span><span class="p">;</span>
-<span class="p">};</span>
+<ul>
+<li><strong>sourcePipe must be a BasePipe.</strong><br/>(should be an object which implement <code>moveNext()</code> and <code>current()</code> methods)</li>
+</ul></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setSourcePipe</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">sourcePipe</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sourcePipeIsValid</span> <span class="o">=</span> <span class="nx">sourcePipe</span> <span class="o">&amp;&amp;</span>
+    <span class="k">typeof</span> <span class="nx">sourcePipe</span><span class="p">.</span><span class="nx">moveNext</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span>
+    <span class="k">typeof</span> <span class="nx">sourcePipe</span><span class="p">.</span><span class="nx">current</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">sourcePipeIsValid</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;setSourcePipe received bad pipe&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
 
-<span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">forEach</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_sourcePipe</span> <span class="o">=</span> <span class="nx">sourcePipe</span><span class="p">;</span>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>When we want other pipe object to read data from <code>this</code> pipe we call
+<code>this.pipe(other)</code></p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>destinationPipe must be a BasePipe.</strong><br/>(should be an object which implements <code>setSourcePipe</code> method)</li>
+</ul></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">pipe</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">destinationPipe</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">destinationPipeIsValid</span> <span class="o">=</span> <span class="nx">destinationPipe</span> <span class="o">&amp;&amp;</span>
+          <span class="k">typeof</span> <span class="nx">destinationPipe</span><span class="p">.</span><span class="nx">setSourcePipe</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">destinationPipeIsValid</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;pipe recieved bad destination pipe&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">destinationPipe</span><span class="p">.</span><span class="nx">setSourcePipe</span><span class="p">(</span><span class="k">this</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>To get chainable syntax return destinationPipe</p></div></div><div class="code"><div class="wrapper">  <span class="k">return</span> <span class="nx">destinationPipe</span><span class="p">;</span>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pipes will not immediately start iterating over source data, unless
+we ask them to do so. This allows efficiently delay computation up to the
+point where it is absolutely necessary. Calling <code>pipe.forEach</code> begins data
+flow.</p>
+
+<p><code>callback</code> should be a function which will be called for each element of
+this pipe.</p>
+
+<p>Example:</p>
+
+<pre><code>  g.V() // creates pipe of graph's vertices
+    // No iteration will start until we call:
+   .forEach(function(vertex) {
+     console.log(v.id); // print all vertices
+   });
+</code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">forEach</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">callback</span> <span class="o">!==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Callback is expected to be a function&quot;</span><span class="p">);</span>
   <span class="p">}</span>
@@ -49,13 +84,19 @@ of <code>_moveNext</code>.</p></div></div><div class="code"><div class="wrapper"
   <span class="p">}</span>
 
   <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-<span class="p">};</span>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="getting-path">Getting path</h2>
 
-<span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">pipe</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">dst</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">dst</span><span class="p">.</span><span class="nx">setSourcePipe</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-  <span class="k">return</span> <span class="nx">dst</span><span class="p">;</span>
-<span class="p">};</span>
+<p>When traversing a graph it is very important to know where we came from
+to current node. Each <code>pipe</code> object has ability to inspect all chain of
+pipes through which traversal algorithm went.</p>
 
+<p>To do so clients should use a <a href="pipes/pathPipe.html">PathPipe</a>.</p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Build array of <code>current</code> objects in the chain of source pipes up to this point.
+And add <code>current</code> object of this pipe to the end of the array</p></div></div><div class="code"><div class="wrapper"><span class="nx">BasePipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getCurrentPath</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">pathToHere</span> <span class="o">=</span> <span class="nx">getPathToHere</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_sourcePipe</span><span class="p">);</span>
+  <span class="nx">pathToHere</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_current</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="nx">pathToHere</span><span class="p">;</span>
+<span class="p">};</span>
 
 <span class="kd">function</span> <span class="nx">getPathToHere</span><span class="p">(</span><span class="nx">basePipe</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">hasPath</span> <span class="o">=</span> <span class="nx">basePipe</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">basePipe</span><span class="p">.</span><span class="nx">getCurrentPath</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">;</span>

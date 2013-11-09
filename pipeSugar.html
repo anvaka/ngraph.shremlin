@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="en"><head><title>pipeSugar</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="pipeSugar"><meta name="groc-project-path" content="lib/pipeSugar.js"><meta name="groc-github-url" content="https://github.com/anvaka/ngraph.shremlin"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/anvaka/ngraph.shremlin/blob/master/lib/pipeSugar.js">lib/pipeSugar.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="syntactic-sugar">Syntactic Sugar</h1>
+
+<p>Syntax of Shremlin if far from being user friendly. I tried to follow
+conventions of <a href="https://github.com/tinkerpop/gremlin">gremlin</a>, which
+has its own pros and cons. New users may be terrified, while users familiar
+with gremlin will meet old friends.</p>
+
+<p>Example:</p>
+
+<pre><code>  g.V(42)  // Start from vertex with id == 42
+   .outE() // visit all outgoing Edges
+   .inV()  // visit vertices at edge heads.
+   .out()  // get out-adjacent vertices
+   .both() // get both in and out adjacent vertices
+</code></pre>
+
+<p>I was thinking about adding more verbose aliases for each chainable
+method. Let me know if that makes sense.</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">augmentPipesSyntax</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Augment each known pipe type with gremlin-like syntax</p></div></div><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">VerticesToVerticesPipe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./pipes/verticesToVerticesPipe&#39;</span><span class="p">),</span>
+    <span class="nx">VerticesPipe</span>        <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./pipes/vertexPipe&#39;</span><span class="p">),</span>
+    <span class="nx">PathPipe</span>            <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./pipes/pathPipe&#39;</span><span class="p">),</span>
+    <span class="nx">EdgesToVerticesPipe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./pipes/edgesToVerticesPipe&#39;</span><span class="p">),</span>
+    <span class="nx">VerticesToEdgesPipe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./pipes/verticesToEdgesPipe&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">augmentPipesSyntax</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">verticesPipes</span> <span class="o">=</span> <span class="p">[</span><span class="nx">VerticesPipe</span><span class="p">,</span> <span class="nx">VerticesToVerticesPipe</span><span class="p">,</span> <span class="nx">EdgesToVerticesPipe</span><span class="p">];</span>
+  <span class="kd">var</span> <span class="nx">edgesPipes</span> <span class="o">=</span> <span class="p">[</span><span class="nx">VerticesToEdgesPipe</span><span class="p">];</span>
+
+  <span class="nx">verticesPipes</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">pipe</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">augmentVerticesPipes</span><span class="p">(</span><span class="nx">pipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">edgesPipes</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">pipe</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">augmentEdgesPipes</span><span class="p">(</span><span class="nx">pipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">verticesPipes</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">edgesPipes</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">pipe</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">augmentGenericPipe</span><span class="p">(</span><span class="nx">pipe</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="pipes-which-take-vertices-as-input">Pipes which take Vertices as input</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="kd">function</span> <span class="nx">augmentVerticesPipes</span><span class="p">(</span><span class="nx">srcPipePrototype</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pipes source to <a href="pipes/verticesToVerticesPipe.html">VerticesToVerticesPipe</a>
+which produces adjacent vertices, connected by head of an edge.</p>
+
+<p>Example:</p>
+
+<pre><code>  A -&gt; B -&gt; C
+  g.V('B').out(); // emits C
+</code></pre></div></div><div class="code"><div class="wrapper">  <span class="nx">srcPipePrototype</span><span class="p">.</span><span class="nx">out</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VerticesToVerticesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;out&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pipes source to <a href="pipes/verticesToVerticesPipe.html">VerticesToVerticesPipe</a>
+which produces adjacent vertices, connected by tail of an edge.</p>
+
+<p>Example:</p>
+
+<pre><code>  A -&gt; B -&gt; C
+  g.V('B').in() - emits A
+</code></pre></div></div><div class="code"><div class="wrapper">  <span class="nx">srcPipePrototype</span><span class="p">.</span><span class="k">in</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VerticesToVerticesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pipes source to <a href="pipes/verticesToVerticesPipe.html">VerticesToVerticesPipe</a>
+which produces adjacent vertices from both sides of an edge</p>
+
+<p>Example:</p>
+
+<pre><code>  A -&gt; B -&gt; C
+  g.V('B').both() - emits A and C
+</code></pre></div></div><div class="code"><div class="wrapper">  <span class="nx">srcPipePrototype</span><span class="p">.</span><span class="nx">both</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VerticesToVerticesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pipes source to <a href="pipes/verticesToEdgesPipe.html">VerticesToEdgesPipe</a>
+which produces outgoing edges</p>
+
+<p>Example:</p>
+
+<pre><code>  A -- edge AB --&gt; B -- edge BC --&gt; C
+  g.V('B').outE() - emits [edge BC]
+</code></pre></div></div><div class="code"><div class="wrapper">  <span class="nx">srcPipePrototype</span><span class="p">.</span><span class="nx">outE</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VerticesToEdgesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;out&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pipes source to <a href="pipes/verticesToEdgesPipe.html">VerticesToEdgesPipe</a>
+which produces incoming edges</p>
+
+<p>Example:</p>
+
+<pre><code>  A -- edge AB --&gt; B -- edge BC --&gt; C
+  g.V('B').inE() - emits [edge AB]
+</code></pre></div></div><div class="code"><div class="wrapper">  <span class="nx">srcPipePrototype</span><span class="p">.</span><span class="nx">inE</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VerticesToEdgesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pipes source to <a href="pipes/verticesToEdgesPipe.html">VerticesToEdgesPipe</a>
+which produces both incoming and outgoing edges</p>
+
+<p>Example:</p>
+
+<pre><code>  A -- edge AB --&gt; B -- edge BC --&gt; C
+  g.V('B').outE() - emits [edge BC] and [edge AB]
+</code></pre></div></div><div class="code"><div class="wrapper">  <span class="nx">srcPipePrototype</span><span class="p">.</span><span class="nx">bothE</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">VerticesToEdgesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span>
+<span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="pipes-which-take-edges-as-input">Pipes which take edges as input</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="kd">function</span> <span class="nx">augmentEdgesPipes</span><span class="p">(</span><span class="nx">srcPipePrototype</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns vertices at the tail of an edge.
+ E.g. <code>A --&gt; B - returns A</code></p></div></div><div class="code"><div class="wrapper">  <span class="nx">srcPipePrototype</span><span class="p">.</span><span class="nx">outV</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">EdgesToVerticesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;out&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns vertices at the head of an edge.
+ E.g. <code>A --&gt; B - returns B</code></p></div></div><div class="code"><div class="wrapper">  <span class="nx">srcPipePrototype</span><span class="p">.</span><span class="nx">inV</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">EdgesToVerticesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns both from and to vertices of an edge
+ E.g. <code>A --&gt; B - returns A and B</code></p></div></div><div class="code"><div class="wrapper">  <span class="nx">srcPipePrototype</span><span class="p">.</span><span class="nx">bothV</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">EdgesToVerticesPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">,</span> <span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="nx">filter</span><span class="p">));</span>
+  <span class="p">};</span>
+<span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="sugar-for-any-kind-of-pipe">Sugar for any kind of pipe</h2></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="kd">function</span> <span class="nx">augmentGenericPipe</span><span class="p">(</span><span class="nx">srcPipePrototype</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pipes source to <a href="pipes/pathPipe.html">PathPipe</a>
+which produces array of objects (vertices, edges, etc.) through
+which it went to reach final point</p>
+
+<p>Example:</p>
+
+<pre><code>  A -- edge AB --&gt; B -- edge BC --&gt; C
+  g.V('A')
+   .outE()
+   .inV() - emits [Vertex A, Edge AB, Vertex B]
+</code></pre></div></div><div class="code"><div class="wrapper">  <span class="nx">srcPipePrototype</span><span class="p">.</span><span class="nx">path</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="k">new</span> <span class="nx">PathPipe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_graph</span><span class="p">));</span>
+  <span class="p">};</span>
+<span class="p">}</span></div></div></div></div></body></html>
