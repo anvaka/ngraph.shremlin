@@ -309,7 +309,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "projectPath": "lib/pipes/edgesToVerticesPipe.js",
             "targetPath": "pipes/edgesToVerticesPipe",
             "pageTitle": "pipes/edgesToVerticesPipe",
-            "title": "edgesToVerticesPipe"
+            "firstHeader": {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Edges to Vertices pipe",
+                "slug": "edges-to-vertices-pipe",
+                "isFileHeader": true
+              },
+              "depth": 1
+            },
+            "title": "Edges to Vertices pipe"
           },
           "depth": 2,
           "outline": []
@@ -389,7 +399,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "projectPath": "lib/pipes/verticesToEdgesPipe.js",
             "targetPath": "pipes/verticesToEdgesPipe",
             "pageTitle": "pipes/verticesToEdgesPipe",
-            "title": "verticesToEdgesPipe"
+            "firstHeader": {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Vertices to Edges pipe",
+                "slug": "vertices-to-edges-pipe",
+                "isFileHeader": true
+              },
+              "depth": 1
+            },
+            "title": "Vertices to Edges pipe"
           },
           "depth": 2,
           "outline": []
@@ -409,7 +429,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "projectPath": "lib/pipes/verticesToVerticesPipe.js",
             "targetPath": "pipes/verticesToVerticesPipe",
             "pageTitle": "pipes/verticesToVerticesPipe",
-            "title": "verticesToVerticesPipe"
+            "firstHeader": {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Vertices to Vertices pipe",
+                "slug": "vertices-to-vertices-pipe",
+                "isFileHeader": true
+              },
+              "depth": 1
+            },
+            "title": "Vertices to Vertices pipe"
           },
           "depth": 2,
           "outline": []
