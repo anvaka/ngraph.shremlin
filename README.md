@@ -8,6 +8,10 @@ Shremlin is a graph traversal library, written in pure javascript, and inspired 
 Start
 =====
 
+The source code is heavily documented. You can read [formatted documentation](http://anvaka.github.io/ngraph.shremlin/).
+
+Here is a quick snippet from documentation:
+
 ``` js
 var shremlin = require('ngraph.shremlin');
 
