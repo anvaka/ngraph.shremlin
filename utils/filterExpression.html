@@ -17,7 +17,7 @@ rules, filters can be used.</p>
 value.</p>
 
 <p>When <code>filterExpression</code> is a simple type (Number, String or Boolean), then
-returned predicat compares <code>data</code> property directly with that value:</p>
+returned predicate compares <code>data</code> property directly with that value:</p>
 
 <pre><code>  var match42 = createFilter(42);
   // this will print true:
@@ -25,7 +25,7 @@ returned predicat compares <code>data</code> property directly with that value:<
 </code></pre>
 
 <p>You might be wondering why it compares against <code>data</code> property, not object
-directly (<code>match42(42)</code>)? It is thank to the fact, that each vertex or
+directly (<code>match42(42)</code>)? It is thank to the fact, that data for each vertex or
 edge of <a href="https://github.com/anvaka/VivaGraphJS">VivaGraph</a>/<a href="https://github.com/anvaka/ngraph.graph">ngraph</a>
 is stored within <code>xxx.data</code> property.</p>
 
