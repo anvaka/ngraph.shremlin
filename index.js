@@ -65,7 +65,7 @@ function createGraphIterators(graph) {
      * starting with a node.
      *
      * @param  {string|number} [startFrom] vertex id to start iteration from.
-     *  If this argument is ommitted, then all graph nodes are iterated
+     *  If this argument is omitted, then all graph nodes are iterated
      *
      * @returns {VertexPipe}
      */
@@ -80,7 +80,7 @@ function createGraphIterators(graph) {
   };
 };
 
-// Add syntatic sugar on top of each iterator, so that you can
+// Add syntactic sugar on top of each iterator, so that you can
 // chain them together.
 var extendIterators = require('./lib/pipeSugar');
 extendIterators();

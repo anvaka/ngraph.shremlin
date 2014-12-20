@@ -13,7 +13,7 @@ var shremlin = require('ngraph.shremlin');
 
 // Let's say we have this oriented, 3x3 grid graph:
 // 0 → 1 → 2
-// ↓   ↓   ↓  
+// ↓   ↓   ↓
 // 3 → 4 → 5
 
 // create graph iterator:
@@ -31,14 +31,14 @@ g.V(1)
  });
 
 // Let's print all neighbors of node 1, reachable via outgoing edge:
-g.V(1) 
+g.V(1)
  .out() // get all outgoing neighbors.
  .forEach(function(node) {
    console.log(node.id); // prints 2, 4;
  });
 
 // How about roots of incoming edges?
-g.V(1) 
+g.V(1)
  .in() // get all "incoming" neighbors
  .forEach(function(node) {
    console.log(node.id); // prints 0;
@@ -46,11 +46,11 @@ g.V(1)
 
 ```
 
-Shremlin uses simple composable steps to achieve complex iterations. E.g. this is how you can get all "grandshildren" of our graph: 
+Shremlin uses simple composable steps to achieve complex iterations. E.g. this is how you can get all "grandchildren" of our graph:
 ``` js
 // Remember our graph?
 // 0 → 1 → 2
-// ↓   ↓   ↓  
+// ↓   ↓   ↓
 // 3 → 4 → 5
 g.V(1)
  .out() // first level children of node 1. It is node 2 and node 4
@@ -61,8 +61,8 @@ g.V(1)
 
 // You can also print path through which we got to last node:
 g.V(1)
- .out() 
- .out() 
+ .out()
+ .out()
  .path()
  .forEach(function(path) {
    // each element of the path is actual node instance.
